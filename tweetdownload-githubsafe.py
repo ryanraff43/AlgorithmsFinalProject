@@ -12,10 +12,12 @@ def get_tweets(hashtags, date, numtweets):
     tagged_tweets = tweepy.Cursor(api.search, q=hashtags, lang="en",since=date, tweet_mode="extended").items(numtweets)
 
     tweets_df = pd.DataFrame(columns=('Date and Time', 'id', 'source', 'Geo', 'Place', 'Retweets', 'tweet', 'Sentiment Polarity'))
-
+    list_tweets = []
     i = 1
     for tweet in tagged_tweets:
 
+        list_tweets.append(tweet.full_text)
+        
         tweets_df.at[i, 'id'] = tweet.id
         tweets_df.at[i, 'source'] = tweet.source
         tweets_df.at[i, 'tweet'] = tweet.full_text
@@ -30,8 +32,9 @@ def get_tweets(hashtags, date, numtweets):
 
     tweets_df.to_csv(hashtags+'tweets.csv', encoding='utf-8')
     print(tweets_df.head())
+    print(list_tweets)
 
 
 get_tweets('bostoncollege', '2020-04-01', 100)
-print(api.rate_limit_status())
+#print(api.rate_limit_status())
 
